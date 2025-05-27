@@ -1,0 +1,162 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .appointment-container {
+    max-width: 1000px;
+    margin: 70px auto;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap;
+    background: linear-gradient(to right, #f9f9f9, #ffffff);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: fadeIn 1s ease-in;
+  }
+
+  .appointment-image-side {
+    flex: 1 1 40%;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    padding: 50px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    animation: slideInLeft 1s ease;
+  }
+
+  .appointment-image-side h2 {
+    font-size: 34px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .appointment-image-side p {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .appointment-form-side {
+    flex: 1 1 60%;
+    padding: 50px 40px;
+    background: #ffffff;
+    animation: slideInRight 1s ease;
+  }
+
+  .form-control {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    padding: 14px 18px;
+    font-size: 16px;
+    background-color: #fdfdfd;
+    border: 1px solid #ddd;
+    transition: 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  .form-control:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.3);
+    outline: none;
+  }
+
+  .btn-send {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    width: 100%;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(106, 17, 203, 0.4);
+  }
+
+  .btn-send:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(37, 117, 252, 0.5);
+  }
+
+  .alert {
+    margin-bottom: 20px;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(30px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
+  @keyframes slideInLeft {
+    from {opacity: 0; transform: translateX(-50px);}
+    to {opacity: 1; transform: translateX(0);}
+  }
+
+  @keyframes slideInRight {
+    from {opacity: 0; transform: translateX(50px);}
+    to {opacity: 1; transform: translateX(0);}
+  }
+
+  @media (max-width: 768px) {
+    .appointment-container {
+      flex-direction: column;
+    }
+
+    .appointment-image-side,
+    .appointment-form-side {
+      padding: 30px 20px;
+    }
+
+    .appointment-image-side h2 {
+      font-size: 26px;
+    }
+  }
+</style>
+
+<div class="appointment-container">
+  <div class="appointment-image-side">
+    <h2>Book Your Appointment</h2>
+    <p>Fill in your details and choose your doctor to confirm your appointment today. We care for your health.</p>
+  </div>
+  <div class="appointment-form-side">
+    <form method="POST" action="">
+      {% csrf_token %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+      <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+      <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+
+      <select name="doctor" class="form-control" required>
+        <option value="">-- Choose a Doctor --</option>
+        <option value="Dr. Samir Rathod">Dr. Samir Rathod</option>
+        <option value="Dr. Seema Singh">Dr. Seema Singh</option>
+        <option value="Dr. Ranjeet Patil">Dr. Ranjeet Patil</option>
+        <option value="Dr. Omkar Rathod">Dr. Omkar Rathod</option>
+        <option value="Dr. Swapnil Patil">Dr. Swapnil Patil</option>
+        <option value="Dr. Anushka Sharma">Dr. Anushka Sharma</option>
+      </select>
+
+      <input type="date" name="date" class="form-control" required>
+
+      <button type="submit" class="btn-send">Confirm Appointment</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

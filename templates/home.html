@@ -1,0 +1,204 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<style>
+.carousel-item img {
+  height: 470px;
+  width: 500px;
+  object-fit: cover;
+}
+
+.btn {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  margin: 5px;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
+
+/* Prevent color change on hover, focus, active for all .btn */
+.btn:hover, 
+.btn:focus, 
+.btn:active {
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  color: white !important;
+  filter: none !important;
+  box-shadow: none !important;
+  text-decoration: none !important;
+}
+
+.card {
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.card-img-top {
+  height: 220px;
+  object-fit: cover;
+}
+
+.card-body {
+  text-align: center;
+}
+
+/* icon-box reusable styles */
+.icon-box {
+  background-color: #f8f9fa;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.icon-box:hover {
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  transform: translateY(-8px);
+}
+
+.icon-box i {
+  font-size: 50px;
+  color: #6a11cb;
+}
+
+.icon-box h5 {
+  margin-top: 20px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.icon-box p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #6c757d;
+}
+</style>
+
+<!-- Carousel Start -->
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'images/doctor2.jpg' %}" class="d-block w-100" alt="Featured Doctor">
+      <div class="carousel-caption d-none d-md-block">
+        <a href="/allappointment/" class="btn">Book Appointment</a>
+        <a href="/contact/" class="btn">Contact Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Carousel End -->
+
+<!-- Top Doctors Section -->
+<div class="container my-5">
+  <h3 class="text-center mb-4">Our Top Doctors</h3>
+  <div class="row justify-content-center g-4">
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <img src="{% static 'images/doctorimage1.avif' %}" class="card-img-top" alt="Dr. Samir Rathod">
+        <div class="card-body">
+          <h5 class="card-title">Dr. Samir Rathod</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Cardiologist</h6>
+          <p class="card-text">Expert in heart diseases and treatments.</p>
+          <a href="/allappointment/" class="btn btn-primary">Book Appointment</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <img src="{% static 'images/doctorimage3.jpg' %}" class="card-img-top" alt="Dr. Seema Singh">
+        <div class="card-body">
+          <h5 class="card-title">Dr. Seema Singh</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Dermatologist</h6>
+          <p class="card-text">Skin care and dermatological expert.</p>
+          <a href="/allappointment/" class="btn btn-primary">Book Appointment</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 col-lg-4">
+      <div class="card">
+        <img src="{% static 'images/doctorimage2.jpg' %}" class="card-img-top" alt="Dr. Ranjeet Patil">
+        <div class="card-body">
+          <h5 class="card-title">Dr. Ranjeet Patil</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Neurologist</h6>
+          <p class="card-text">Specialist in brain and nervous system disorders.</p>
+          <a href="/allappointment/" class="btn btn-primary">Book Appointment</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Services Section -->
+<div class="container my-5">
+  <h3 class="text-center mb-4">Explore Our Services</h3>
+  <div class="row text-center g-4">
+    <div class="col-md-4">
+      <div class="icon-box">
+        <i class="bi bi-search"></i>
+        <h5>Find a Doctor</h5>
+        <p>Search by specialty, location, or availability to find the right doctor for your needs.</p>
+        <a href="finddoctor/" class="btn btn-primary mt-2">Know More</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="icon-box">
+        <i class="bi bi-calendar-event"></i>
+        <h5>Appointment</h5>
+        <p>Schedule consultations at your convenience. Skip the wait, book anytime.</p>
+        <a href="/allappointment/" class="btn btn-primary mt-2">Know More</a>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="icon-box">
+        <i class="bi bi-chat-dots"></i>
+        <h5>Feedback</h5>
+        <p>Let us know how we’re doing. Your feedback helps us serve you better!</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLScp1uTiVMICRxkH39fTG2otW4X9hMjvV3v8FhXb4pexgNLuxQ/viewform?usp=sharing&ouid=118110388558405694436" class="btn btn-primary mt-2" target="_blank" rel="noopener">Tell Us</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Why Choose Us Section -->
+<div class="container my-5">
+  <h3 class="text-center mb-4">Why Choose Us?</h3>
+  <div class="row text-center g-4">
+    <div class="col-md-4">
+      <div class="icon-box">
+        <i class="bi bi-person-circle"></i>
+        <h5>Expert Doctors</h5>
+        <p>Our doctors are highly qualified and experienced in their respective fields. They are committed to providing the best care for you.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="icon-box">
+        <i class="bi bi-clock"></i>
+        <h5>24/7 Availability</h5>
+        <p>We are available round the clock to assist you with your health needs. No matter the time, we’re here for you.</p>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="icon-box">
+        <i class="bi bi-calendar-check"></i>
+        <h5>Easy Booking</h5>
+        <p>Book your appointments easily through our user-friendly platform. It's quick, simple, and hassle-free!</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block main %}
+
+<style>
+    /* Main container styling */
+    .otp-container {
+        max-width: 450px; /* Slightly smaller for a tighter feel */
+        margin: 70px auto; /* Adjust margin for better vertical centering */
+        padding: 35px; /* More padding for internal spacing */
+        text-align: center;
+        background-color: #ffffff; /* Pure white background */
+        border-radius: 15px; /* Softer rounded corners */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12); /* Enhanced shadow for depth */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+    }
+
+    /* Heading styling */
+    .otp-container h2 {
+        margin-bottom: 25px; /* More space below heading */
+        font-size: 28px; /* Slightly larger heading */
+        color: #333333; /* Darker grey for better contrast */
+        font-weight: 600; /* Semi-bold for prominence */
+    }
+
+    /* Paragraph for instructions */
+    .otp-container p {
+        color: #555555; /* Softer grey for body text */
+        margin-bottom: 30px; /* Space before input */
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    /* OTP input field styling */
+    .otp-input-single {
+        width: 220px; /* Slightly wider for better visual balance */
+        height: 65px; /* Taller for easier tapping on mobile */
+        text-align: center;
+        font-size: 26px; /* Larger font for OTP digits */
+        font-weight: 500; /* Medium weight for readability */
+        border: 2px solid #dddddd; /* Softer border */
+        border-radius: 10px; /* Rounded corners for the input */
+        margin-bottom: 25px; /* Space below input */
+        transition: all 0.3s ease-in-out; /* Smooth transitions for hover/focus */
+        box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        letter-spacing: 2px; /* Add some letter spacing for readability of digits */
+    }
+
+    .otp-input-single:focus {
+        border-color: #6a0dad; /* A more vibrant purple on focus */
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(106, 13, 173, 0.2); /* Soft glow effect */
+    }
+
+    /* Verify button styling */
+    .verify-btn {
+        padding: 14px 35px; /* More padding for a larger touch target */
+        font-size: 18px; /* Larger text on button */
+        font-weight: 600; /* Semi-bold button text */
+        border: none;
+        border-radius: 8px; /* Rounded corners */
+        background-color: #4b0082; /* Your primary purple */
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease; /* Add transform for press effect */
+        width: 100%; /* Full width button */
+    }
+
+    .verify-btn:hover {
+        background-color: #3a0066; /* Slightly darker purple on hover */
+    }
+
+    .verify-btn:active {
+        transform: translateY(1px); /* Slight press effect on click */
+    }
+
+    /* Message styling (Django messages) */
+    .alert {
+        padding: 12px 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        font-size: 15px;
+        display: flex; /* Use flexbox for better alignment of text and close button */
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .alert-danger {
+        background-color: #fdd;
+        color: #d8000c;
+        border: 1px solid #f5c6cb;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .btn-close {
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+        color: inherit; /* Inherit color from parent alert */
+        opacity: 0.7;
+        transition: opacity 0.2s;
+    }
+
+    .btn-close:hover {
+        opacity: 1;
+    }
+</style>
+
+<div class="otp-container">
+    <h2>Verify Your OTP</h2>
+    <p>Enter the 6-digit code sent to your registered email to verify your identity.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
+                {{ message }}
+                {% if message.tags != 'error' %} {# Only show close button for non-error messages, typically success #}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+                        &times;
+                    </button>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        <input type="text" name="otp" id="otp_input" maxlength="6" pattern="\d{6}" class="otp-input-single" placeholder="______" inputmode="numeric" autocomplete="one-time-code" required>
+
+        <button type="submit" class="verify-btn">Verify Code</button>
+    </form>
+</div>
+
+{% endblock %}

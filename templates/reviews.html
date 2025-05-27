@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main %}
+<style>
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: #f0f2f5;
+    padding: 0px;
+  }
+
+  .review-form {
+    max-width: 500px;
+    margin: auto;
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  }
+
+  .review-form h2 {
+    text-align: center;
+    margin-bottom: 25px;
+    color: #333;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: border 0.3s;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .submit-btn {
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+</style>
+
+<div class="review-form">
+  <h2 style="color: #4b0082;">Submit Your Review</h2>
+
+  {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+      <label for="name">Your Name</label>
+      <input type="text" id="name" name="name" placeholder="Enter your name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Your Email</label>
+      <input type="email" id="email" name="email" placeholder="Enter email id" required>
+    </div>
+
+    <div class="form-group">
+      <label for="review">Your Review</label>
+      <textarea id="review" name="review" placeholder="Write your feedback here..." required></textarea>
+    </div>
+
+    <button type="submit" class="submit-btn">Submit Review</button>
+  </form>
+</div>
+
+<h2 style="text-align:center; margin-top: 40px;">User Reviews</h2>
+
+{% if data %}
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 20px;">
+    {% for review in data %}
+      <div style="background: #ffffff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); width: 300px;">
+        <h4 style="margin-bottom: 10px; color: #4b0082;">{{ review.name }}</h4>
+        <p style="font-size: 0.9em; color: #666;"><strong>{{ review.email }}</strong></p>
+        <p style="margin-top: 10px; font-style: italic;">"{{ review.review }}"</p>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <p style="text-align:center; margin-top: 20px;">No reviews found.</p>
+{% endif %}
+
+{% endblock %}

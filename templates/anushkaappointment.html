@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+
+<!-- Modern Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: #f3f4f6;
+  }
+
+  .appointment-container {
+    max-width: 960px;
+    margin: 60px auto;
+    border-radius: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+    animation: fadeIn 0.7s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .appointment-image-side {
+    flex: 1 1 40%;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    padding: 60px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .appointment-image-side h2 {
+    font-size: 32px;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .appointment-image-side p {
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  .appointment-form-side {
+    flex: 1 1 60%;
+    padding: 60px 40px;
+    background: #fafafa;
+  }
+
+  .form-control {
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 13px 16px;
+    border-radius: 12px;
+    font-size: 15px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #7c3aed;
+    box-shadow: 0 0 6px rgba(124, 58, 237, 0.3);
+    outline: none;
+  }
+
+  .btn-send {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    padding: 14px;
+    font-weight: 600;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 10px;
+    transition: 0.3s ease;
+  }
+
+  .btn-send:hover {
+    background: #5e17eb;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(94, 23, 235, 0.25);
+  }
+
+  .alert {
+    margin-bottom: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .appointment-container {
+      flex-direction: column;
+    }
+
+    .appointment-image-side,
+    .appointment-form-side {
+      padding: 40px 25px;
+    }
+
+    .appointment-image-side h2 {
+      font-size: 26px;
+    }
+  }
+</style>
+
+<div class="appointment-container">
+  <div class="appointment-image-side">
+    <h2>Book Your Appointment</h2>
+    <p>Quickly schedule your visit with our specialist. We’re here to care for you and your health.</p>
+  </div>
+
+  <div class="appointment-form-side">
+    <form method="POST" action="">
+      {% csrf_token %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <input type="text" name="name" class="form-control" placeholder="Full Name" required>
+      <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+      <input type="text" name="phone" class="form-control" placeholder="Phone Number" required>
+
+      <select name="doctor" class="form-control" required>
+        <option value="">-- Choose a Doctor --</option>
+        <option value="Dr. Anushka Sharma">Dr. Anushka Sharma</option>
+      </select>
+
+      <input type="date" name="date" class="form-control" required>
+
+      <textarea name="message" class="form-control" rows="4" placeholder="Additional Notes (optional)"></textarea>
+
+      <button type="submit" class="btn-send">Confirm Appointment</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
