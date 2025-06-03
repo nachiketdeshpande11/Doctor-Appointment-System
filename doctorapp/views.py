@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.db import IntegrityError, DatabaseError
 from .models import Contact
-from .models import Reviews,Appointment,Patient
+from .models import Reviews,Appointment,Patient, Doctor
 import re
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -74,9 +74,11 @@ class ContactView(View):
     
 
 
-def finddoctor(request):
-    return render(request, 'finddoctor.html')
+# def finddoctor(request):
+#     return render(request, 'finddoctor.html')
 
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='login')  # Redirect to login page if user is not authenticated
 def allappointment(request):
     if request.method == 'POST':
         try:
@@ -85,17 +87,18 @@ def allappointment(request):
             phone = request.POST.get('phone')
             doctor = request.POST.get('doctor')
             date = request.POST.get('date')
-            
+
             if not name or not email or not phone or not doctor or not date:
                 messages.error(request, "All fields are required.")
                 return render(request, 'allappointment.html')
-            
+
             if not re.match(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$', email):
                 messages.error(request, "Invalid email format.")
                 return render(request, 'allappointment.html')
-            
-            # Save appointment
+
+            # Save appointment with logged-in user (if your model supports it)
             Appointment.objects.create(
+                # user=request.user,  # Make sure your model has a 'user = models.ForeignKey(User, ...)'
                 name=name,
                 email=email,
                 phone=phone,
@@ -117,7 +120,7 @@ Here are your appointment details:
 Please arrive 10-15 minutes early and bring any relevant medical records with you.
 
 Thank you for choosing DoctorAppointment.  
-Stay healthy,
+Stay healthy,  
 DoctorAppointment Team
             '''
             from_email = settings.EMAIL_HOST_USER
@@ -135,6 +138,38 @@ DoctorAppointment Team
             messages.error(request, f"An unexpected error occurred: {str(e)}")
 
     return render(request, 'allappointment.html')
+
+def viewappointment(request):
+    m=Appointment.objects.all()
+    context={'data' :m}
+    return render(request, 'viewappointment.html',context=context)
+
+
+def delete(request,mid):
+    m=Appointment.objects.filter(id=mid)
+    m.delete()
+    return redirect('/viewappointment')
+
+
+def edit(request,mid):
+    d={}
+    
+    m=Appointment.objects.filter(id=mid)
+    if request.method=='GET':
+        d['data']=m
+        return render(request, 'edit.html',d)
+    else:
+        name=request.POST['name']
+        email=request.POST['email']
+        phone=request.POST['phone']
+        doctor=request.POST['doctor']
+        date= request.POST['date']
+        
+        
+        m_obj=Appointment.objects.filter(id=mid)
+        m_obj.update(name=name,email=email,phone=phone,doctor=doctor,date=date)
+        messages.success(request, "Appointment updated successfully.")
+        return redirect('/viewappointment')
 
 def reviews(request):
     if request.method == "POST":
@@ -315,7 +350,7 @@ def verify_otp(request):
 
             if str(otp_entered) == str(otp_data["otp"]):
                 messages.success(request, "OTP verified successfully.")
-                return redirect("/")  
+                return redirect("reset_password")  
             else:
                 messages.error(request, "Invalid OTP.")
                 return redirect("verify_otp")
@@ -324,3 +359,61 @@ def verify_otp(request):
             return redirect("forgot_password")
 
     return render(request, "verify_otp.html")
+
+def reset_password(request):
+    if request.method == "POST":
+        email = request.POST.get("email")
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        # Validate form inputs
+        if not email or not new_password or not confirm_password:
+            messages.error(request, "All fields are required!")
+            return redirect("reset_password")
+
+        # Check if passwords match
+        if new_password != confirm_password:
+            messages.error(request, "Passwords do not match!")
+            return redirect("reset_password")
+
+        # Validate password complexity
+        if len(new_password) < 6 or not any(char.isdigit() for char in new_password) or not any(char.isalpha() for char in new_password):
+            messages.error(request, "Password must be at least 6 characters long and contain both letters and numbers.")
+            return redirect("reset_password")
+
+        # Try to find the user by email
+        try:
+            user = User.objects.get(email=email)
+        except User.ObjectDoesNotExist:
+            messages.error(request, "No account found with the provided email.")
+            return redirect("reset_password")
+
+        # Reset the password
+        user.set_password(new_password)
+        user.save()
+
+        # Provide feedback and redirect
+        messages.success(request, "Password reset successful! You can log in now.")
+        return redirect("login")
+
+    return render(request, "reset_password.html")
+
+
+from django.db.models import Q
+
+def srcfilter(request):
+    search_query = request.GET.get('search', '')
+    if search_query:
+        doctors = Doctor.objects.filter(
+            Q(name__icontains=search_query) |
+            Q(specialty__icontains=search_query) |
+            Q(location__icontains=search_query)
+        )
+    else:
+        doctors = Doctor.objects.all()
+
+    context = {
+        'data': doctors,
+        'errmsg': '' if doctors else 'No matching doctors found.'
+    }
+    return render(request, 'finddoctor.html', context)

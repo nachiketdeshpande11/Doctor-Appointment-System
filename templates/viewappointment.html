@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .appointment-details-container {
+    max-width: 800px;
+    margin: 70px auto;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-in;
+  }
+
+  .appointment-details-container h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #333;
+  }
+
+  .appointment-info {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #444;
+  }
+
+  .appointment-info strong {
+    color: #222;
+    width: 160px;
+    display: inline-block;
+  }
+
+  .btn-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+  }
+
+  .btn-edit, .btn-delete {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-align: center;
+  }
+
+  .btn-edit {
+    background: linear-gradient(to right, #2575fc, #6a11cb);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(37, 117, 252, 0.4);
+  }
+
+  .btn-edit:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(37, 117, 252, 0.5);
+  }
+
+  .btn-delete {
+    background: #ff4d4d;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(255, 77, 77, 0.4);
+  }
+
+  .btn-delete:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(255, 77, 77, 0.5);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<div class="appointment-details-container">
+  <h2>Appointment Details</h2>
+
+  {% for appointment in data %}
+    <div class="appointment-info"><strong>Name:</strong> {{ appointment.name }}</div>
+    <div class="appointment-info"><strong>Email:</strong> {{ appointment.email }}</div>
+    <div class="appointment-info"><strong>Phone:</strong> {{ appointment.phone }}</div>
+    <div class="appointment-info"><strong>Doctor:</strong> {{ appointment.doctor }}</div>
+    <div class="appointment-info"><strong>Date:</strong> {{ appointment.date }}</div>
+
+    <div class="btn-actions">
+      <a href="{% url 'edit' appointment.id %}" class="btn-edit">Edit Appointment</a>
+      <a href="{% url 'delete' appointment.id %}" class="btn-delete">Delete Appointment</a>
+    </div>
+
+    <hr style="margin: 40px 0;">
+  {% empty %}
+    <p>No appointments found.</p>
+  {% endfor %}
+</div>
+
+
+{% endblock %}

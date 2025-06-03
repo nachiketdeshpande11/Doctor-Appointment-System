@@ -58,20 +58,19 @@
   }
 
   .btn-send {
-    background-color: #4b0082;
-    color: #fff;
-    border: none;
-    padding: 14px;
     width: 100%;
-    font-weight: bold;
-    font-size: 16px;
+    padding: 12px;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    font-weight: 600;
+    border: none;
     border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background 0.3s;
+    cursor: pointer;
   }
 
   .btn-send:hover {
-    background-color: #350060;
-    transform: scale(1.03);
+    background: linear-gradient(to right, #5a0eba, #1f65e3);
   }
 
   .already-registered {
@@ -87,8 +86,6 @@
   .already-registered a:hover {
     text-decoration: underline;
   }
-
- 
 </style>
 
 <div class="register-container">
@@ -109,7 +106,19 @@
       {% endif %}
       <input type="text" name="full_name" class="form-control" placeholder="Full Name" required>
       <input type="text" name="username" class="form-control" placeholder="Username" required>
-      <input type="date" name="dob" class="form-control" placeholder="Date of Birth" required>
+
+      <!-- Updated DOB field -->
+      <input type="date" name="dob" id="dob" class="form-control" placeholder="Date of Birth" required>
+      <script>
+        document.addEventListener('DOMContentLoaded', function () {
+          const dobField = document.getElementById('dob');
+          const today = new Date();
+          today.setDate(today.getDate() - 1); // Set to yesterday
+          const maxDate = today.toISOString().split('T')[0];
+          dobField.setAttribute('max', maxDate);
+        });
+      </script>
+
       <select name="gender" class="form-control" required>
         <option value="">Select Gender</option>
         <option value="Male">Male</option>

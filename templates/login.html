@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 {% block main %}
 
 <style>
@@ -57,20 +58,22 @@
     outline: none;
   }
 
+  /* Updated login button style to match register button gradient */
   .btn-send {
-    background-color: #4b0082;
-    color: #fff;
-    border: none;
-    padding: 14px;
     width: 100%;
-    font-weight: bold;
+    padding: 14px;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    font-weight: 600;
     font-size: 16px;
+    border: none;
     border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.3s ease;
   }
 
   .btn-send:hover {
-    background-color: #350060;
+    background: linear-gradient(to right, #5a0eba, #1f65e3);
     transform: scale(1.03);
   }
 
@@ -87,6 +90,45 @@
   .not-registered a:hover {
     text-decoration: underline;
   }
+
+  /* Social Login Buttons with gradient background */
+  .social-login-wrapper {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .social-login-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(106, 17, 203, 0.4);
+    transition: box-shadow 0.3s ease, transform 0.3s ease, background 0.3s ease;
+    user-select: none;
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    border: none;
+    cursor: pointer;
+  }
+
+  .social-login-btn:hover {
+    box-shadow: 0 6px 20px rgba(37, 117, 252, 0.6);
+    transform: translateY(-2px);
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+  }
+
+  .social-icon {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+  }
 </style>
 
 <div class="login-container">
@@ -98,12 +140,12 @@
     <form method="post">
       {% csrf_token %}
       {% if messages %}
-      {% for message in messages %}
-      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
-        {{ message }}
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      </div>
-      {% endfor %}
+        {% for message in messages %}
+          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
       {% endif %}
       <input type="text" name="username" class="form-control" placeholder="Username" required>
       <input type="password" name="password" class="form-control" placeholder="Password" required>
@@ -111,9 +153,27 @@
     </form>
     <div class="not-registered">
       <p><a href="{% url 'forgot_password' %}">Forgot password?</a></p>
+
+      <div class="social-login-wrapper">
+        <a href="{% provider_login_url 'google' %}" class="social-login-btn" aria-label="Login with Google">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+              d="M21.805 10.023h-9.53v3.91h5.557c-.238 1.403-1.503 4.114-5.557 4.114-3.346 0-6.075-2.77-6.075-6.18 0-3.41 2.729-6.18 6.075-6.18 1.9 0 3.172.81 3.91 1.505l2.66-2.558C17.34 5.205 15.436 4.4 13.21 4.4 7.91 4.4 4 8.383 4 13.454c0 5.07 3.91 9.053 8.94 9.053 5.16 0 8.58-3.63 8.58-8.74 0-.588-.064-1.036-.715-1.74z" />
+          </svg>
+          Login with Google
+        </a>
+
+        <a href="{% provider_login_url 'github' %}" class="social-login-btn" aria-label="Login with GitHub">
+          <svg class="social-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path
+              d="M12 0.297a12 12 0 00-3.79 23.41c.6.11.82-.26.82-.58v-2.17c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.1-.75.08-.73.08-.73 1.22.09 1.86 1.25 1.86 1.25 1.08 1.85 2.83 1.32 3.52 1.01.11-.78.42-1.32.76-1.62-2.66-.3-5.47-1.34-5.47-5.97 0-1.32.47-2.4 1.24-3.25-.13-.3-.54-1.52.12-3.17 0 0 1-.32 3.3 1.23a11.4 11.4 0 016 0c2.3-1.55 3.3-1.23 3.3-1.23.67 1.65.26 2.87.13 3.17.77.85 1.24 1.93 1.24 3.25 0 4.64-2.82 5.67-5.5 5.97.43.37.82 1.1.82 2.23v3.31c0 .32.22.69.82.57A12.01 12.01 0 0012 0.297z" />
+          </svg>
+          Login with GitHub
+        </a>
+      </div>
+      <br>
       <p>Not registered yet? <a href="/register/">Register here</a></p>
     </div>
-
   </div>
 </div>
 

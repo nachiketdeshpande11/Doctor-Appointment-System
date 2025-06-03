@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  * {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .edit-container {
+    max-width: 800px;
+    margin: 80px auto;
+    padding: 40px;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.8s ease-in;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .form-control {
+    margin-bottom: 20px;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    transition: 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 8px rgba(106, 17, 203, 0.2);
+    outline: none;
+  }
+
+  .btn-update {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    padding: 14px;
+    width: 100%;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s ease;
+  }
+
+  .btn-update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<div class="edit-container">
+  <h2>Edit Appointment</h2>
+  <form method="POST">
+    {% csrf_token %}
+    <input type="text" name="name" class="form-control" placeholder="Full Name" value="{{ appointment.name }}" required>
+    <input type="email" name="email" class="form-control" placeholder="Email Address" value="{{ appointment.email }}"
+      required>
+    <input type="text" name="phone" class="form-control" placeholder="Phone Number" value="{{ appointment.phone }}"
+      required>
+
+    <select name="doctor" class="form-control" required>
+      <option value="">-- Choose a Doctor --</option>
+      <option value="Dr. Samir Rathod" {% if appointment.doctor=="Dr. Samir Rathod" %}selected{% endif %}>Dr. Samir
+        Rathod</option>
+      <option value="Dr. Seema Singh" {% if appointment.doctor=="Dr. Seema Singh" %}selected{% endif %}>Dr. Seema Singh
+      </option>
+      <option value="Dr. Ranjeet Patil" {% if appointment.doctor=="Dr. Ranjeet Patil" %}selected{% endif %}>Dr. Ranjeet
+        Patil</option>
+      <option value="Dr. Omkar Rathod" {% if appointment.doctor=="Dr. Omkar Rathod" %}selected{% endif %}>Dr. Omkar
+        Rathod</option>
+      <option value="Dr. Swapnil Patil" {% if appointment.doctor=="Dr. Swapnil Patil" %}selected{% endif %}>Dr. Swapnil
+        Patil</option>
+      <option value="Dr. Anushka Sharma" {% if appointment.doctor=="Dr. Anushka Sharma" %}selected{% endif %}>Dr.
+        Anushka Sharma</option>
+    </select>
+
+    <input type="date" name="date" class="form-control" value="{{ appointment.date|date:'Y-m-d' }}" required>
+
+    <button type="submit" class="btn-update">Update Appointment</button>
+  </form>
+</div>
+
+{% endblock %}

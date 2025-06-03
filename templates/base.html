@@ -142,37 +142,43 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/"><i
-                class="bi bi-house-door-fill"></i> Home</a>
+            <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/"><i class="bi bi-house-door-fill"></i> Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/register/' %}active{% endif %}" href="/register/"><i
-                class="bi bi-person-plus-fill"></i> Register as Patient</a>
+
+          <!-- Patient Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if request.path == '/register/' or request.path == '/login/' %}active{% endif %}" href="#" id="patientDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-fill"></i> Patient
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="patientDropdown">
+              <li><a class="dropdown-item" href="/register/">Register</a></li>
+              {% if request.user.is_authenticated %}
+              <li><a class="dropdown-item" href="/logout/">Logout</a></li>
+              {% else %}
+              <li><a class="dropdown-item" href="/login/">Login</a></li>
+              {% endif %}
+            </ul>
           </li>
-          <li class="nav-item">
-            {% if request.user.is_authenticated %}
-            <a class="nav-link" href="/logout/">
-              <i class="bi bi-box-arrow-right"></i> Logout
+
+          <!-- Appointment Dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle {% if request.path == '/allappointment/' or request.path == '/viewappointment/' %}active{% endif %}" href="#" id="appointmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-calendar-check-fill"></i> Appointment
             </a>
-            {% else %}
-            <a class="nav-link {% if request.path == '/login/' %}active{% endif %}" href="/login/">
-              <i class="bi bi-person-plus-fill"></i> Login as Patient
-            </a>
-            {% endif %}
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="appointmentDropdown">
+              <li><a class="dropdown-item" href="/allappointment/">Book Appointment</a></li>
+              <li><a class="dropdown-item" href="/viewappointment/">View Appointment</a></li>
+            </ul>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/allappointment/' %}active{% endif %}" href="/allappointment/"><i
-                class="bi bi-calendar-check-fill"></i> Book Appointment</a>
+            <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/"><i class="bi bi-envelope-fill"></i> Contact Us</a>
           </li>
+
           <li class="nav-item">
-            <a class="nav-link {% if request.path == '/contact/' %}active{% endif %}" href="/contact/"><i
-                class="bi bi-envelope-fill"></i> Contact Us</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link {% if request.path == '/reviews/' %}active{% endif %}" href="/reviews/"><i
-                class="bi bi-chat-dots-fill"></i> Reviews</a>
+            <a class="nav-link {% if request.path == '/reviews/' %}active{% endif %}" href="/reviews/"><i class="bi bi-chat-dots-fill"></i> Reviews</a>
           </li>
         </ul>
       </div>

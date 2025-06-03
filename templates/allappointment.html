@@ -91,18 +91,39 @@
   }
 
   @keyframes fadeIn {
-    from {opacity: 0; transform: translateY(30px);}
-    to {opacity: 1; transform: translateY(0);}
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   @keyframes slideInLeft {
-    from {opacity: 0; transform: translateX(-50px);}
-    to {opacity: 1; transform: translateX(0);}
+    from {
+      opacity: 0;
+      transform: translateX(-50px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   @keyframes slideInRight {
-    from {opacity: 0; transform: translateX(50px);}
-    to {opacity: 1; transform: translateX(0);}
+    from {
+      opacity: 0;
+      transform: translateX(50px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
   }
 
   @media (max-width: 768px) {
@@ -130,12 +151,12 @@
     <form method="POST" action="">
       {% csrf_token %}
       {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
+      {% for message in messages %}
+      <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}success{% endif %}" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %}
       {% endif %}
 
       <input type="text" name="name" class="form-control" placeholder="Full Name" required>
@@ -152,9 +173,9 @@
         <option value="Dr. Anushka Sharma">Dr. Anushka Sharma</option>
       </select>
 
-      <input type="date" name="date" class="form-control" required>
+      <input type="date" name="date" id="appointment-date" class="form-control" required>
 
-      <button type="submit" class="btn-send">Confirm Appointment</button>
+      <button type="submit" class="btn-send">Book Appointment</button>
     </form>
   </div>
 </div>

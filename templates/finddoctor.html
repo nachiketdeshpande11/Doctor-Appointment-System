@@ -1,172 +1,162 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block main %}
+
 <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    padding: 20px;
+  }
 
-    body {
-        font-family: 'Segoe UI', sans-serif;
-        background-color: #f4f7fa;
-        color: #333;
-        padding: 20px;
-    }
+  .doctor-container {
+    max-width: 1200px;
+    margin: 60px auto;
+    border-radius: 16px;
+    background-color: #fff;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  }
 
-    header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
+  .search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
 
-    header h1 {
-        font-size: 2.5rem;
-        margin-bottom: 15px;
-    }
+  .search-bar input[type="search"] {
+    flex: 1;
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    transition: 0.3s ease;
+  }
 
-    header input {
-        width: 90%;
-        max-width: 500px;
-        padding: 10px 15px;
-        font-size: 1rem;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
+  .search-bar input:focus {
+    border-color: #4b0082;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(75, 0, 130, 0.2);
+  }
 
-    /* 3 column in 1 row start */
-    .doctor-list {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        /* Always 3 columns */
-        gap: 20px;
-    }
+  .search-bar .btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+  }
 
-    /* 3 column in 1 row end */
+  .doctor-card {
+    background-color: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
-    .doctor-card {
-        background-color: #fff;
-        border-radius: 16px;
-        padding: 0;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: transform 0.3s;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
+  .doctor-card:hover {
+    transform: translateY(-5px);
+  }
 
-    .doctor-card:hover {
-        transform: translateY(-5px);
-    }
+  .doctor-card img {
+    height: 220px;
+    width: 100%;
+    object-fit: cover;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
 
-    .doctor-card img {
-        width: 100%;
-        height: 220px;
-        object-fit: cover;
-        border-top-left-radius: 16px;
-        border-top-right-radius: 16px;
-    }
+  .doctor-card-body {
+    padding: 20px;
+    background-color: #fafafa;
+    flex-grow: 1;
+  }
 
-    .doctor-info {
-        padding: 15px 20px;
-        flex-grow: 1;
-    }
+  .doctor-card-body h5 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: #333;
+  }
 
-    .doctor-info h2 {
-        font-size: 1.3rem;
-        margin-bottom: 8px;
-        color: #333;
-    }
+  .doctor-card-body p {
+    color: #666;
+    margin: 4px 0;
+    font-size: 15px;
+  }
 
-    .doctor-info p {
-        margin: 4px 0;
-        color: #666;
-    }
+  .btn-purple {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+  }
 
-    .doctor-card button {
-        margin: 15px 20px 20px;
-        padding: 10px 20px;
-        background: linear-gradient(to right, #6a11cb, #2575fc);
-        color: #fff;
-        font-weight: bold;
-        border: none;
-        border-radius: 6px;
-        cursor: pointer;
-        align-self: center;
-        max-width: 180px;
-        transition: background-color 0.3s;
-    }
+  .btn-purple:hover {
+    background-color: #005fa3;
+  }
 
-    .doctor-card button:hover {
-        background-color: #005fa3;
-    }
+  .alert {
+    margin-bottom: 20px;
+  }
 </style>
 
-<header>
-    <h1 style="color: #4b0082;">Find a Doctor</h1>
-    <input type="text" placeholder="Search by name, specialty, or location..." />
-</header>
-
-<main class="doctor-list">
-    <div class="doctor-card">
-        <img src="{% static 'images/doctorimage1.avif' %}" alt="Dr. Samir Rathod" />
-        <div class="doctor-info">
-            <h2>Dr. Samir Rathod</h2>
-            <p>Cardiologist</p>
-            <p>Pune, Maharashtra</p>
-        </div>
-        <a href="/allappointment/"><button>Book Appointment</button></a>
+<div class="doctor-container">
+  {% if errmsg %}
+    <div class="alert alert-danger text-center" role="alert">
+      {{ errmsg }}
     </div>
+  {% endif %}
 
-    <div class="doctor-card">
-        <img src="{% static 'images/doctorimage3.jpg' %}" alt="Dr. Seema Singh" />
-        <div class="doctor-info">
-            <h2>Dr. Seema Singh</h2>
-            <p>Dermatologist</p>
-            <p>Mumbai, Maharashtra</p>
-        </div>
-        <a href="/allappointment/"><button>Book Appointment</button></a>
-    </div>
+  <!-- Search Form -->
+  <form method="get" action="{% url 'srcfilter' %}" class="search-bar">
+    <input type="search" name="search" placeholder="Search by name, specialty, or location"
+           value="{{ request.GET.search|default:'' }}" aria-label="Search" required>
+    <button class="btn btn-purple" type="submit">
+      <i class="bi bi-search"></i> Search
+    </button>
 
-    <div class="doctor-card">
-        <img src="{% static 'images/doctorimage2.jpg' %}" alt="Dr. Ranjeet Patil" />
-        <div class="doctor-info">
-            <h2>Dr. Ranjeet Patil</h2>
-            <p>Neurologist</p>
-            <p>Nagpur, Maharashtra</p>
-        </div>
-        <a href="/allappointment/"><button>Book Appointment</button></a>
-    </div>
+    {% if request.GET.search %}
+    <a href="{% url 'srcfilter' %}" class="btn btn-outline-secondary">
+      <i class="bi bi-x-circle"></i> Clear Filters
+    </a>
+    {% endif %}
+  </form>
 
-    <div class="doctor-card">
-        <img src="{% static 'images/doctorimage5.jpg' %}" alt="Dr. Omkar Rathod" />
-        <div class="doctor-info">
-            <h2>Dr. Omkar Rathod</h2>
-            <p>Neurologist</p>
-            <p>Pune, Maharashtra</p>
-        </div>
-        <a href="/allappointment/"><button>Book Appointment</button></a>
-    </div>
+  <!-- Doctor Cards -->
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 animate__animated animate__fadeInUp">
+    {% for doctor in data %}
+    <div class="col">
+      <div class="doctor-card">
+        {% if doctor.image %}
+        <img src="{{ doctor.image.url }}" alt="{{ doctor.name }}">
+        {% else %}
+        <img src="{% static 'default.jpg' %}" alt="Default Image">
+        {% endif %}
 
-    <div class="doctor-card">
-        <img src="{% static 'images/doctorimage6.webp' %}" alt="Dr. Swapnil Patil" />
-        <div class="doctor-info">
-            <h2>Dr. Swapnil Patil</h2>
-            <p>Dermatologist</p>
-            <p>Nagpur, Maharashtra</p>
+        <div class="doctor-card-body d-flex flex-column">
+          <h5>{{ doctor.name }}</h5>
+          <p><strong>Specialty:</strong> {{ doctor.specialty }}</p>
+          <p><strong>Location:</strong> {{ doctor.location }}</p>
+          <a href="/allappointment/" class="btn btn-purple mt-auto">Book Appointment</a>
         </div>
-        <a href="/allappointment/"><button>Book Appointment</button></a>
+      </div>
     </div>
+    {% empty %}
+    <div class="col-12 text-center">
+      <p class="text-muted">No doctors found.</p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
-    <div class="doctor-card">
-        <img src="{% static 'images/doctorimage4.jpg' %}" alt="Dr. Anushka Sharma" />
-        <div class="doctor-info">
-            <h2>Dr. Anushka Sharma</h2>
-            <p>Cardiologist</p>
-            <p>Mumbai, Maharashtra</p>
-        </div>
-        <a href="/allappointment/"><button>Book Appointment</button></a>
-    </div>
-</main>
 {% endblock %}
