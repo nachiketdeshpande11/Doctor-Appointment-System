@@ -58,7 +58,7 @@ class ContactView(View):
                 mobile=mobile,
                 email=email,
                 message=message
-            )
+            )   #orm query
 
             messages.success(request, "Your message has been sent successfully.")
             return redirect('contact')  # ensure 'contact' is a valid URL name
@@ -104,7 +104,7 @@ def allappointment(request):
                 phone=phone,
                 doctor=doctor,
                 date=date,
-            )
+            )  #orm query
 
             # Send confirmation email
             subject = 'Appointment Confirmation - DoctorAppointment'
@@ -140,7 +140,7 @@ DoctorAppointment Team
     return render(request, 'allappointment.html')
 
 def viewappointment(request):
-    m=Appointment.objects.all()
+    m=Appointment.objects.all()   #orm
     context={'data' :m}
     return render(request, 'viewappointment.html',context=context)
 
